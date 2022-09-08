@@ -16,6 +16,20 @@
 			class="text-center text-secondary border boder-success"
 			th:text="${titulo}"
 		></h2>
+		<!--<div
+			th:object="${cliente}"
+			th:remove="tag"
+		>
+			<ul
+				th:if="${#fields.hasErrors('*')}"
+				class="alert alert-danger"
+			>
+				<li
+					th:each="error : ${#fields.errors('*')}"
+					th:text="${error}"
+				></li>
+			</ul>
+		</div>-->
 		<form
 			th:action="@{/form}"
 			th:object="${cliente}"
