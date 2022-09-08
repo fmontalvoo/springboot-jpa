@@ -8,7 +8,7 @@
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous"
 >
-<title>Lista usuarios</title>
+<title th:text="${titulo}"></title>
 </head>
 <body>
 	<div class="container mt-5 mb-5">
@@ -16,6 +16,7 @@
 			class="text-center text-secondary border boder-success"
 			th:text="${titulo}"
 		></h2>
+		<a class="btn btn-success" th:href="@{/form}">Agregar</a>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -23,6 +24,7 @@
 					<th>Nombre</th>
 					<th>Apellido</th>
 					<th>Email</th>
+					<th>Fecha creacion</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,6 +33,7 @@
 					<td th:text="${cliente.nombre}"></td>
 					<td th:text="${cliente.apellido}"></td>
 					<td th:text="${cliente.email}"></td>
+					<td th:text="${cliente.createdAt}"></td>
 				</tr>
 			</tbody>
 		</table>
