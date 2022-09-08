@@ -15,6 +15,7 @@ public class ClienteController {
 
 	@GetMapping("/list")
 	public String listar(Model model) {
+		model.addAttribute("titulo", "Listado de clientes");
 		model.addAttribute("clientes", cdao.findAll());
 		return "list";
 	}
