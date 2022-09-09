@@ -9,12 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
 
 @Entity
 @Table(name = "clientes")
@@ -82,11 +82,25 @@ public class Cliente implements Serializable {
 		return serialVersionUID;
 	}
 
+	@Override
+	public String toString() {
+		return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
+				+ ", createdAt=" + createdAt + "]";
+	}
+
 	/**
-	 * Asigan fecha de creacion antes de guardar en la base de datos.
+	 * Asigan fecha de creacion antes de persistir en la base de datos.
 	 */
 	@PrePersist
 	public void prePersist() {
+		this.createdAt = new Date();
+	}
+
+	/**
+	 * Asigan fecha de creacion antes de actualizar.
+	 */
+	@PreUpdate
+	public void preUpdate() {
 		this.createdAt = new Date();
 	}
 
