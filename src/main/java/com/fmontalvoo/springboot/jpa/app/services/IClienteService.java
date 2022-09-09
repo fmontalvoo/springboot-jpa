@@ -2,6 +2,9 @@ package com.fmontalvoo.springboot.jpa.app.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
 
 public interface IClienteService {
@@ -10,6 +13,8 @@ public interface IClienteService {
 	public Cliente findById(Long id);
 
 	public List<Cliente> findAll();
+
+	public Page<Cliente> findAll(Pageable pageable);
 
 	public void delete(Long id);
 }
