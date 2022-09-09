@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
 import com.fmontalvoo.springboot.jpa.app.services.IClienteService;
@@ -48,20 +49,23 @@ public class ClienteController {
 	}
 
 	@PostMapping("/form")
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model) {
+	public String guardar(@Valid Cliente cliente, BindingResult result, RedirectAttributes flash, Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Guardar cliente");
 			return "form";
 		}
 
 		cs.save(cliente);
+		flash.addFlashAttribute("success", "Cliente guardado con exito");
 		return "redirect:/list";
 	}
 
 	@GetMapping("/delete/{id}")
-	public String eliminar(@PathVariable Long id) {
-		if (id != null && id > 0)
+	public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
+		if (id != null && id > 0) {
 			cs.delete(id);
+			flash.addFlashAttribute("success", "Cliente eliminado con exito");
+		}
 		return "redirect:/list";
 	}
 
