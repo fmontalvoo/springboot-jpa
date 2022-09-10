@@ -5,9 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +34,8 @@ public class ClienteController {
 
 	@Autowired
 	private IClienteService cs;
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@GetMapping("/view/{id}")
 	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
@@ -88,13 +93,22 @@ public class ClienteController {
 		}
 
 		if (!foto.isEmpty()) {
-			String uploadsPath = "C:/opt/uploads";
+//			String uploadsPath = "C:/opt/uploads";
+			String[] original = foto.getOriginalFilename().split("\\.");
+			String extension = original[original.length - 1];
+			String nombreImagen = UUID.randomUUID().toString().concat(".").concat(extension);
+			Path uploadsPath = Paths.get("uploads").resolve(nombreImagen);
+
+			logger.info("Foto: " + nombreImagen);
 			try {
-				byte[] bytes = foto.getBytes();
-				Path rutaFoto = Paths.get(uploadsPath.concat("/").concat(foto.getOriginalFilename()));
-				Files.write(rutaFoto, bytes);
+//				byte[] bytes = foto.getBytes();
+//				Path rutaFoto = Paths.get(uploadsPath.concat("/").concat(foto.getOriginalFilename()));
+//				Files.write(rutaFoto, bytes);
+
+				Files.copy(foto.getInputStream(), uploadsPath.toAbsolutePath());
+
 				flash.addFlashAttribute("info", "Se ha modificado la foto de usuario");
-				cliente.setFotoUrl(foto.getOriginalFilename());
+				cliente.setFotoUrl(nombreImagen);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
