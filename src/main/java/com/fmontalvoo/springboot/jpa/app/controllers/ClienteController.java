@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
 import com.fmontalvoo.springboot.jpa.app.services.IClienteService;
+import com.fmontalvoo.springboot.jpa.app.util.PageRender;
 
 @Controller
 public class ClienteController {
@@ -29,9 +31,13 @@ public class ClienteController {
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
 		Pageable pageRequest = PageRequest.of(page, 5);
+		Page<Cliente> clientes = cs.findAll(pageRequest);
+		PageRender<Cliente> pageRender = new PageRender<>("/list", clientes);
 
 		model.addAttribute("titulo", "Listado de clientes");
-		model.addAttribute("clientes", cs.findAll(pageRequest));
+		model.addAttribute("clientes", clientes);
+		model.addAttribute("page", pageRender);
+
 		return "list";
 	}
 

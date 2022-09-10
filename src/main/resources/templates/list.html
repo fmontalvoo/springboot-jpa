@@ -41,10 +41,9 @@
 				</tr>
 			</tbody>
 		</table>
+		<nav th:replace="layout/paginator-nav :: paginator"></nav>
 	</div>
-	
 	<footer th:replace="layout/layout :: footer"></footer>
-	
 	<script type="text/javascript">
 		const btns = document.getElementsByClassName("btn-danger");
 		console.info(btns);
@@ -61,6 +60,5 @@
 		});
 		}
 	</script>
-	
 </body>
 </html>
