@@ -26,6 +26,7 @@
 			th:action="@{/form}"
 			th:object="${cliente}"
 			method="post"
+			enctype="multipart/form-data"
 		>
 			<input
 				type="hidden"
@@ -73,7 +74,20 @@
 					th:errors="*{email}"
 				></small>
 			</div>
-			<div class="text-center col-12">
+			<div class="input-group">
+				<input
+					type="file"
+					name="file"
+					class="form-control"
+					id="foto"
+				/>
+				<!-- <small
+					class="text-danger"
+					th:if="${#fields.hasErrors('fotoUrl')}"
+					th:errors="*{fotoUrl}"
+				></small> -->
+			</div>
+			<div class="text-center col-12 mt-3">
 				<button
 					class="btn btn-lg btn-primary"
 					type="submit"

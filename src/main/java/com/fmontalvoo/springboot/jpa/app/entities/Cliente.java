@@ -28,6 +28,9 @@ public class Cliente implements Serializable {
 	private String nombre;
 	@NotBlank
 	private String apellido;
+
+	@Column(name = "foto_url")
+	private String fotoUrl;
 	@Email
 	@NotBlank
 	private String email;
@@ -62,6 +65,14 @@ public class Cliente implements Serializable {
 		this.apellido = apellido;
 	}
 
+	public String getFotoUrl() {
+		return fotoUrl;
+	}
+
+	public void setFotoUrl(String fotoUrl) {
+		this.fotoUrl = fotoUrl;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -84,8 +95,8 @@ public class Cliente implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
-				+ ", createdAt=" + createdAt + "]";
+		return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", fotoUrl=" + fotoUrl
+				+ ", email=" + email + ", createdAt=" + createdAt + "]";
 	}
 
 	/**
