@@ -88,11 +88,10 @@ public class ClienteController {
 		}
 
 		if (!foto.isEmpty()) {
-			Path directorio = Paths.get("src/main/resources/static/uploads");
-			String uploads = directorio.toFile().getAbsolutePath();
+			String uploadsPath = "C:/opt/uploads";
 			try {
 				byte[] bytes = foto.getBytes();
-				Path rutaFoto = Paths.get(uploads.concat("/").concat(foto.getOriginalFilename()));
+				Path rutaFoto = Paths.get(uploadsPath.concat("/").concat(foto.getOriginalFilename()));
 				Files.write(rutaFoto, bytes);
 				flash.addFlashAttribute("info", "Se ha modificado la foto de usuario");
 				cliente.setFotoUrl(foto.getOriginalFilename());
