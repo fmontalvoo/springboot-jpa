@@ -32,6 +32,20 @@ public class ClienteController {
 	@Autowired
 	private IClienteService cs;
 
+	@GetMapping("/view/{id}")
+	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
+		Cliente cliente = cs.findById(id);
+		if (cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no existe");
+			return "redirect:/list";
+		}
+
+		model.addAttribute("cliente", cliente);
+		model.addAttribute("titulo", cliente.getNombre().concat(" ").concat(cliente.getApellido()));
+
+		return "view";
+	}
+
 	@GetMapping("/list")
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
 
