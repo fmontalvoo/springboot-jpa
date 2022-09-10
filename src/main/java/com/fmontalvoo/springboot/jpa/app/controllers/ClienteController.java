@@ -1,21 +1,13 @@
 package com.fmontalvoo.springboot.jpa.app.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
 import com.fmontalvoo.springboot.jpa.app.services.IClienteService;
+import com.fmontalvoo.springboot.jpa.app.services.IUploadFileService;
 import com.fmontalvoo.springboot.jpa.app.util.PageRender;
 
 @Controller
@@ -41,8 +34,8 @@ public class ClienteController {
 	@Autowired
 	private IClienteService cs;
 
-	private static final String UPLOAD_FOLDER = "uploads";
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	@Autowired
+	private IUploadFileService ufs;
 
 	@GetMapping("/form")
 	public String formulario(Map<String, Object> model) {
@@ -72,31 +65,15 @@ public class ClienteController {
 		}
 
 		if (!foto.isEmpty()) {
-//			String uploadsPath = "C:/opt/uploads";
-
 			if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFotoUrl() != null
 					&& !cliente.getFotoUrl().isEmpty()) {
-				Path pathImg = Paths.get(UPLOAD_FOLDER).resolve(cliente.getFotoUrl()).toAbsolutePath();
-				File img = pathImg.toFile();
-				if (img.exists() && img.canRead())
-					img.delete();
+				ufs.delete(cliente.getFotoUrl());
 			}
 
-			String[] original = foto.getOriginalFilename().split("\\.");
-			String extension = original[original.length - 1];
-			String nombreImagen = UUID.randomUUID().toString().concat(".").concat(extension);
-			Path uploadsPath = Paths.get(UPLOAD_FOLDER).resolve(nombreImagen);
+			flash.addFlashAttribute("info", "Se ha modificado la foto de usuario");
 
-			logger.info("Foto: " + nombreImagen);
 			try {
-//				byte[] bytes = foto.getBytes();
-//				Path rutaFoto = Paths.get(uploadsPath.concat("/").concat(foto.getOriginalFilename()));
-//				Files.write(rutaFoto, bytes);
-
-				Files.copy(foto.getInputStream(), uploadsPath.toAbsolutePath());
-
-				flash.addFlashAttribute("info", "Se ha modificado la foto de usuario");
-				cliente.setFotoUrl(nombreImagen);
+				cliente.setFotoUrl(ufs.copy(foto));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -140,35 +117,26 @@ public class ClienteController {
 		if (id != null && id > 0) {
 			Cliente c = cs.findById(id);
 
-			Path pathImg = Paths.get(UPLOAD_FOLDER).resolve(c.getFotoUrl()).toAbsolutePath();
-			File img = pathImg.toFile();
-
-			if (img.exists() && img.canRead()) {
-				if (img.delete()) {
-					cs.delete(id);
-					flash.addFlashAttribute("success", "Cliente eliminado con exito");
-				}
+			if (ufs.delete(c.getFotoUrl())) {
+				cs.delete(id);
+				flash.addFlashAttribute("success", "Cliente eliminado con exito");
 			}
-
 		}
+
 		return "redirect:/list";
+
 	}
 
 	@GetMapping("/uploads/{filename:.+}")
 	public ResponseEntity<Resource> obtenerImagen(@PathVariable String filename) {
-		Path pathImg = Paths.get(UPLOAD_FOLDER).resolve(filename).toAbsolutePath();
-		Resource resource = null;
 		try {
-			resource = new UrlResource(pathImg.toUri());
-			if (!resource.exists() || !resource.isReadable())
-				throw new RuntimeException("No se puede leer el archivo");
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+					.body(ufs.load(filename));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-				.body(resource);
+		return null;
 	}
 
 }
