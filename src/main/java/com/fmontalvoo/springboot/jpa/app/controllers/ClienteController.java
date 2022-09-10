@@ -1,5 +1,6 @@
 package com.fmontalvoo.springboot.jpa.app.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -40,6 +41,7 @@ public class ClienteController {
 	@Autowired
 	private IClienteService cs;
 
+	private static final String UPLOAD_FOLDER = "uploads";
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@GetMapping("/form")
@@ -71,10 +73,19 @@ public class ClienteController {
 
 		if (!foto.isEmpty()) {
 //			String uploadsPath = "C:/opt/uploads";
+
+			if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFotoUrl() != null
+					&& !cliente.getFotoUrl().isEmpty()) {
+				Path pathImg = Paths.get(UPLOAD_FOLDER).resolve(cliente.getFotoUrl()).toAbsolutePath();
+				File img = pathImg.toFile();
+				if (img.exists() && img.canRead())
+					img.delete();
+			}
+
 			String[] original = foto.getOriginalFilename().split("\\.");
 			String extension = original[original.length - 1];
 			String nombreImagen = UUID.randomUUID().toString().concat(".").concat(extension);
-			Path uploadsPath = Paths.get("uploads").resolve(nombreImagen);
+			Path uploadsPath = Paths.get(UPLOAD_FOLDER).resolve(nombreImagen);
 
 			logger.info("Foto: " + nombreImagen);
 			try {
@@ -127,15 +138,25 @@ public class ClienteController {
 	@GetMapping("/delete/{id}")
 	public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
 		if (id != null && id > 0) {
-			cs.delete(id);
-			flash.addFlashAttribute("success", "Cliente eliminado con exito");
+			Cliente c = cs.findById(id);
+
+			Path pathImg = Paths.get(UPLOAD_FOLDER).resolve(c.getFotoUrl()).toAbsolutePath();
+			File img = pathImg.toFile();
+
+			if (img.exists() && img.canRead()) {
+				if (img.delete()) {
+					cs.delete(id);
+					flash.addFlashAttribute("success", "Cliente eliminado con exito");
+				}
+			}
+
 		}
 		return "redirect:/list";
 	}
 
 	@GetMapping("/uploads/{filename:.+}")
 	public ResponseEntity<Resource> obtenerImagen(@PathVariable String filename) {
-		Path pathImg = Paths.get("uploads").resolve(filename).toAbsolutePath();
+		Path pathImg = Paths.get(UPLOAD_FOLDER).resolve(filename).toAbsolutePath();
 		Resource resource = null;
 		try {
 			resource = new UrlResource(pathImg.toUri());
