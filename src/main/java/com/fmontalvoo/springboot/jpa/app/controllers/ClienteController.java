@@ -37,34 +37,6 @@ public class ClienteController {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@GetMapping("/view/{id}")
-	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
-		Cliente cliente = cs.findById(id);
-		if (cliente == null) {
-			flash.addFlashAttribute("error", "El cliente no existe");
-			return "redirect:/list";
-		}
-
-		model.addAttribute("cliente", cliente);
-		model.addAttribute("titulo", cliente.getNombre().concat(" ").concat(cliente.getApellido()));
-
-		return "view";
-	}
-
-	@GetMapping("/list")
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
-
-		Pageable pageRequest = PageRequest.of(page, 5);
-		Page<Cliente> clientes = cs.findAll(pageRequest);
-		PageRender<Cliente> pageRender = new PageRender<>("/list", clientes);
-
-		model.addAttribute("titulo", "Listado de clientes");
-		model.addAttribute("clientes", clientes);
-		model.addAttribute("page", pageRender);
-
-		return "list";
-	}
-
 	@GetMapping("/form")
 	public String formulario(Map<String, Object> model) {
 		Cliente cliente = new Cliente();
@@ -117,6 +89,34 @@ public class ClienteController {
 		cs.save(cliente);
 		flash.addFlashAttribute("success", "Cliente guardado con exito");
 		return "redirect:/list";
+	}
+
+	@GetMapping("/view/{id}")
+	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
+		Cliente cliente = cs.findById(id);
+		if (cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no existe");
+			return "redirect:/list";
+		}
+
+		model.addAttribute("cliente", cliente);
+		model.addAttribute("titulo", cliente.getNombre().concat(" ").concat(cliente.getApellido()));
+
+		return "view";
+	}
+
+	@GetMapping("/list")
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+
+		Pageable pageRequest = PageRequest.of(page, 5);
+		Page<Cliente> clientes = cs.findAll(pageRequest);
+		PageRender<Cliente> pageRender = new PageRender<>("/list", clientes);
+
+		model.addAttribute("titulo", "Listado de clientes");
+		model.addAttribute("clientes", clientes);
+		model.addAttribute("page", pageRender);
+
+		return "list";
 	}
 
 	@GetMapping("/delete/{id}")
