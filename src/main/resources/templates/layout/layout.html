@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head th:fragment="head">
 <meta charset="UTF-8" />
 <link
@@ -31,14 +34,60 @@
 				>
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="collapse navbar-collapse">
-					<ul class="navbar-nav">
+				<div
+					class="collapse navbar-collapse"
+					id="navbarNav"
+				>
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a
 							class="nav-link active"
 							aria-current="page"
 							th:href="@{/list}"
 						>Clientes</a></li>
 					</ul>
+					<div class="d-inline d-flex">
+						<!-- <button class="btn btn-outline-danger" (click)="logout()">
+                        Cerrar sesi&oacute;n
+                    </button> -->
+						<div
+							sec:authorize="isAuthenticated()"
+							class="nav-item dropdown"
+						>
+							<button
+								class="btn btn-secondary dropdown-toggle"
+								type="button"
+								id="dropdownMenuButton1"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							>
+								<b>Usuario: </b><span sec:authentication="name"></span>
+							</button>
+							<div
+								class="dropdown-menu"
+								aria-labelledby="dropdownMenuButton1"
+							>
+								<form
+									th:action="@{/logout}"
+									method="post"
+								>
+									<input
+										type="hidden"
+										th:name="${_csrf.parameterName}"
+										th:value="${_csrf.token}"
+									/>
+									<button
+										class="btn btn-xs"
+										type="submit"
+									>Cerrar sesi&oacute;n</button>
+								</form>
+							</div>
+						</div>
+						<a
+							sec:authorize="!isAuthenticated()"
+							class="btn btn-primary"
+							th:href="@{/login}"
+						>Iniciar sesi&oacute;n</a>
+					</div>
 				</div>
 			</div>
 		</nav>
@@ -73,6 +122,11 @@
 			th:src="@{/images/spring.png}"
 			alt="Spring logo"
 		/>
+		<div sec:authorize="isAuthenticated()">
+			<small> <b>Usuario: </b><span sec:authentication="name"></span>
+				| <b>Roles:</b> <span sec:authentication="principal.authorities"></span>
+			</small>
+		</div>
 		<p>
 			Powered by <a href="https://projects.spring.io/spring-boot/">Spring
 				Boot</a> y <a href="http://www.thymeleaf.org">Thymeleaf</a>.
