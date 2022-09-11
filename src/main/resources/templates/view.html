@@ -42,6 +42,10 @@
 					th:if="${#lists.isEmpty(cliente.facturas)}"
 					class="alert alert-info mt-3"
 				>Este cliente no tiene facturas registradas</div>
+				<a
+					class="btn btn-success"
+					th:href="@{'/factura/form/' + ${cliente.id}}"
+				>Crear factura</a>
 				<table
 					th:unless="${#lists.isEmpty(cliente.facturas)}"
 					class="table table-bordered table-striped mt-3"

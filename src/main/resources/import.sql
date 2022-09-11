@@ -17,6 +17,6 @@ INSERT INTO productos(nombre, precio, created_at) VALUES('Producto#5', 699.99, '
 
 INSERT INTO facturas(cliente_id, descripcion, created_at) VALUES(1, 'Esto es una factura.', '2022-09-10');
 
-INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(2, 1, 1);
+INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(2, 1, 5);
 INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(4, 1, 3);
-INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(6, 1, 5);
+INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(6, 1, 1);
