@@ -2,10 +2,13 @@ package com.fmontalvoo.springboot.jpa.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +44,8 @@ public class ClienteController {
 
 	@Autowired
 	private IUploadFileService ufs;
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@GetMapping("/form")
 	public String formulario(Map<String, Object> model) {
@@ -100,7 +110,14 @@ public class ClienteController {
 	}
 
 	@GetMapping(value = { "/", "/list" })
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication auth) {
+
+		if (auth != null) {
+			if (hasRole("ROLE_ADMIN"))
+				logger.warn("EL USUARIO: [".concat(auth.getName()).concat("] TIENE ROL DE ADMINISTRADOR"));
+			else
+				logger.warn("EL USUARIO: [".concat(auth.getName()).concat("] NO TIENE ROL DE ADMINISTRADOR"));
+		}
 
 		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Cliente> clientes = cs.findAll(pageRequest);
@@ -137,6 +154,31 @@ public class ClienteController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private boolean hasRole(String role) {
+		SecurityContext context = SecurityContextHolder.getContext();
+
+		if (context == null)
+			return false;
+
+		Authentication auth = context.getAuthentication();
+
+		if (auth == null)
+			return false;
+
+		logger.warn("Usuario actual: ".concat(auth.getName()));
+
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+
+//		for (GrantedAuthority authority : authorities) {
+//			if (authority.getAuthority().equals(role))
+//				return true;
+//		}
+//
+//		return false;
+
+		return authorities.contains(new SimpleGrantedAuthority(role));
 	}
 
 }
