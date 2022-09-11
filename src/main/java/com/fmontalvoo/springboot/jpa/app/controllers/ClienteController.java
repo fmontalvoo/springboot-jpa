@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -110,13 +112,25 @@ public class ClienteController {
 	}
 
 	@GetMapping(value = { "/", "/list" })
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication auth) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication auth,
+			HttpServletRequest request) {
 
 		if (auth != null) {
 			if (hasRole("ROLE_ADMIN"))
-				logger.warn("EL USUARIO: [".concat(auth.getName()).concat("] TIENE ROL DE ADMINISTRADOR"));
+				logger.info("EL USUARIO: [".concat(auth.getName()).concat("] TIENE ROL DE ADMINISTRADOR"));
 			else
-				logger.warn("EL USUARIO: [".concat(auth.getName()).concat("] NO TIENE ROL DE ADMINISTRADOR"));
+				logger.info("EL USUARIO: [".concat(auth.getName()).concat("] NO TIENE ROL DE ADMINISTRADOR"));
+		}
+
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
+				"ROLE_");
+
+		if (securityContext.isUserInRole("ADMIN")) {
+			logger.warn("EL USUARIO: [".concat(auth.getName()).concat("] TIENE ROL DE ADMINISTRADOR"));
+		}
+
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			logger.error("EL USUARIO: [".concat(auth.getName()).concat("] TIENE ROL DE ADMINISTRADOR"));
 		}
 
 		Pageable pageRequest = PageRequest.of(page, 5);
