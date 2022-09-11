@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,14 +27,18 @@ import com.fmontalvoo.springboot.jpa.app.entities.Producto;
 import com.fmontalvoo.springboot.jpa.app.services.IClienteService;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping("/factura")
 @SessionAttributes("factura")
+//@PreAuthorize("hasRole('ROLE_USER')")
 public class FacturaController {
 
 	@Autowired
 	private IClienteService cs;
 
+//	@Secured("ROLE_ADMIN")
 	@GetMapping("/form/{clienteId}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String crear(@PathVariable Long clienteId, Model model, RedirectAttributes flash) {
 
 		Cliente cliente = cs.findById(clienteId);
@@ -51,6 +57,7 @@ public class FacturaController {
 	}
 
 	@PostMapping("/form")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String guardar(@Valid Factura factura, BindingResult result, Model model,
 			@RequestParam(name = "item_id[]", required = false) Long[] itemsId,
 			@RequestParam(name = "cantidad[]", required = false) Integer[] cantidades, RedirectAttributes flash,
@@ -80,6 +87,7 @@ public class FacturaController {
 		return "redirect:/view/".concat(factura.getCliente().getId().toString());
 	}
 
+//	@Secured("ROLE_USER")
 	@GetMapping("/view/{id}")
 	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
 //		Factura factura = cs.findFacturaById(id);
@@ -94,6 +102,7 @@ public class FacturaController {
 	}
 
 	@GetMapping("/delete/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String eliminar(@PathVariable Long id, RedirectAttributes flash) {
 		if (id != null && id > 0) {
 			Factura f = cs.findFacturaById(id);
@@ -110,6 +119,7 @@ public class FacturaController {
 		return "redirect:/list";
 	}
 
+//	@Secured("ROLE_USER")
 	@GetMapping(value = "/buscar-productos/{nombre}", produces = { "application/json" })
 	public @ResponseBody List<Producto> bucarProductos(@PathVariable String nombre, Model model) {
 		return cs.findProductosByName(nombre);
