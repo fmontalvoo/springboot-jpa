@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fmontalvoo.springboot.jpa.app.dao.ClienteRepository;
+import com.fmontalvoo.springboot.jpa.app.dao.ProductoRepository;
 //import com.fmontalvoo.springboot.jpa.app.dao.IClienteDao;
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
+import com.fmontalvoo.springboot.jpa.app.entities.Producto;
 
 @Service
 public class ClienteServiceImpl implements IClienteService {
@@ -20,6 +22,9 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private ProductoRepository productoRepository;
 
 	@Override
 	@Transactional
@@ -49,6 +54,13 @@ public class ClienteServiceImpl implements IClienteService {
 	@Transactional
 	public void delete(Long id) {
 		clienteRepository.deleteById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findByName(String name) {
+//		return productoRepository.buscarPorNombre(name);
+		return productoRepository.findByNombreLikeIgnoreCase("%"+name+"%");
 	}
 
 }
