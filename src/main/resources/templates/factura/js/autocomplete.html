@@ -33,13 +33,13 @@
                         return false;
                     }
 
-                    let linea = $("#plantillaItemsFactura").html();
+                    let item = $("#plantillaItemsFactura").html();
 
-                    linea = linea.replace(/{ID}/g, ui.item.value);
-                    linea = linea.replace(/{NOMBRE}/g, ui.item.label);
-                    linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+                    item = item.replace(/{ID}/g, ui.item.value);
+                    item = item.replace(/{NOMBRE}/g, ui.item.label);
+                    item = item.replace(/{PRECIO}/g, ui.item.precio);
 
-                    $("#cargarItemProductos tbody").append(linea);
+                    $("#cargarItemProductos tbody").append(item);
                     itemsHelper.calcularSubTotal(ui.item.value, ui.item.precio, 1);
 
                     return false;

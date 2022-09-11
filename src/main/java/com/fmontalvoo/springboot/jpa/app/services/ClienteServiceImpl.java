@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fmontalvoo.springboot.jpa.app.dao.ClienteRepository;
+import com.fmontalvoo.springboot.jpa.app.dao.FacturaRepository;
 import com.fmontalvoo.springboot.jpa.app.dao.ProductoRepository;
 //import com.fmontalvoo.springboot.jpa.app.dao.IClienteDao;
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
+import com.fmontalvoo.springboot.jpa.app.entities.Factura;
 import com.fmontalvoo.springboot.jpa.app.entities.Producto;
 
 @Service
@@ -25,6 +27,9 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Autowired
 	private ProductoRepository productoRepository;
+
+	@Autowired
+	private FacturaRepository facturaRepository;
 
 	@Override
 	@Transactional
@@ -58,9 +63,33 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Producto> findByName(String name) {
+	public List<Producto> findProductosByName(String name) {
 //		return productoRepository.buscarPorNombre(name);
-		return productoRepository.findByNombreLikeIgnoreCase("%"+name+"%");
+		return productoRepository.findByNombreLikeIgnoreCase("%" + name + "%");
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Producto findProductoById(Long id) {
+		return productoRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public void saveFactura(Factura factura) {
+		facturaRepository.save(factura);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Factura findFacturaById(Long id) {
+		return facturaRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public void deleteFactura(Long id) {
+		facturaRepository.deleteById(id);
 	}
 
 }

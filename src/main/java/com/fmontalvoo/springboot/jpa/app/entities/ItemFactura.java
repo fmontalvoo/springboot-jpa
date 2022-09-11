@@ -29,6 +29,14 @@ public class ItemFactura implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public ItemFactura() {
+	}
+
+	public ItemFactura(Integer cantidad, Producto producto) {
+		this.cantidad = cantidad;
+		this.producto = producto;
+	}
+
 	public Long getId() {
 		return id;
 	}

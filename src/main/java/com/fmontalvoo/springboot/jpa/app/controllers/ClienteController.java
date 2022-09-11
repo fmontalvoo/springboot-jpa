@@ -124,7 +124,6 @@ public class ClienteController {
 		}
 
 		return "redirect:/list";
-
 	}
 
 	@GetMapping("/uploads/{filename:.+}")

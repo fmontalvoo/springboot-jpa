@@ -19,6 +19,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "facturas")
@@ -27,6 +28,7 @@ public class Factura implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank
 	private String descripcion;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "created_at")
@@ -95,7 +97,7 @@ public class Factura implements Serializable {
 		this.items = items;
 	}
 
-	public Double calcularTotal() {
+	public Double getTotal() {
 		Double total = 0.0;
 		for (ItemFactura itemFactura : items) {
 			total += itemFactura.calcularSubTotal();

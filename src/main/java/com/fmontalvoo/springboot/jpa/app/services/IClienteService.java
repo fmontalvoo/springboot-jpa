@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
+import com.fmontalvoo.springboot.jpa.app.entities.Factura;
 import com.fmontalvoo.springboot.jpa.app.entities.Producto;
 
 public interface IClienteService {
@@ -19,5 +20,13 @@ public interface IClienteService {
 
 	public void delete(Long id);
 
-	public List<Producto> findByName(String name);
+	public List<Producto> findProductosByName(String name);
+
+	public Producto findProductoById(Long id);
+
+	public void saveFactura(Factura factura);
+
+	public Factura findFacturaById(Long id);
+
+	public void deleteFactura(Long id);
 }

@@ -74,6 +74,10 @@ public class Cliente implements Serializable {
 		this.apellido = apellido;
 	}
 
+	public String getNombreCompleto() {
+		return this.nombre.concat(" ").concat(apellido);
+	}
+
 	public String getFotoUrl() {
 		return fotoUrl;
 	}
