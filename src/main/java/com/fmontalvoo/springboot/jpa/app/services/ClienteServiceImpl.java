@@ -45,6 +45,12 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public Cliente fetchByIdWithFacturas(Long id) {
+		return clienteRepository.fetchByIdWithFacturas(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<Cliente> findAll() {
 		return (List<Cliente>) clienteRepository.findAll();
 	}
@@ -84,6 +90,11 @@ public class ClienteServiceImpl implements IClienteService {
 	@Transactional(readOnly = true)
 	public Factura findFacturaById(Long id) {
 		return facturaRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public Factura fetchByIdWithClienteWithItemFacturaWithProducto(Long id) {
+		return facturaRepository.fetchByIdWithClienteWithItemFacturaWithProducto(id);
 	}
 
 	@Override

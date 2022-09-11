@@ -14,6 +14,8 @@ public interface IClienteService {
 
 	public Cliente findById(Long id);
 
+	public Cliente fetchByIdWithFacturas(Long id);
+
 	public List<Cliente> findAll();
 
 	public Page<Cliente> findAll(Pageable pageable);
@@ -27,6 +29,8 @@ public interface IClienteService {
 	public void saveFactura(Factura factura);
 
 	public Factura findFacturaById(Long id);
+
+	public Factura fetchByIdWithClienteWithItemFacturaWithProducto(Long id);
 
 	public void deleteFactura(Long id);
 }

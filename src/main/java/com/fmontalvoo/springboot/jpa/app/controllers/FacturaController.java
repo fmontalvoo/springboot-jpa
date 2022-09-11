@@ -82,7 +82,8 @@ public class FacturaController {
 
 	@GetMapping("/view/{id}")
 	public String view(@PathVariable Long id, Model model, RedirectAttributes flash) {
-		Factura factura = cs.findFacturaById(id);
+//		Factura factura = cs.findFacturaById(id);
+		Factura factura = cs.fetchByIdWithClienteWithItemFacturaWithProducto(id);
 		if (factura == null) {
 			flash.addFlashAttribute("error", "Factura no existe");
 			return "redirect:/list";
