@@ -8,3 +8,9 @@ INSERT INTO clientes(nombre, apellido, email, foto_url, created_at) VALUES('Linu
 INSERT INTO clientes(nombre, apellido, email, foto_url, created_at) VALUES('Richard', 'Stallman', 'gnu@mail.com', '', '2022-09-09');
 INSERT INTO clientes(nombre, apellido, email, foto_url, created_at) VALUES('Doctor', 'Manhatan', 'dr.mt@mail.com', '', '2022-09-09');
 INSERT INTO clientes(nombre, apellido, email, foto_url, created_at) VALUES('Alan', 'Moore', 'alan.m@mail.com', '', '2022-09-09');
+
+INSERT INTO productos(nombre, precio, created_at) VALUES('Producto#1', 150.5, '2022-09-10');
+INSERT INTO productos(nombre, precio, created_at) VALUES('Producto#2', 79.99, '2022-09-10');
+INSERT INTO productos(nombre, precio, created_at) VALUES('Producto#3', 10.5, '2022-09-10');
+INSERT INTO productos(nombre, precio, created_at) VALUES('Producto#4', 45.0, '2022-09-10');
+INSERT INTO productos(nombre, precio, created_at) VALUES('Producto#5', 699.99, '2022-09-10');
