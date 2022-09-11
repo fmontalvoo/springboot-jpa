@@ -62,6 +62,7 @@ public class ItemFactura implements Serializable {
 	}
 
 	public Double calcularSubTotal() {
-		return this.cantidad.doubleValue() * this.producto.getPrecio();
+		String res = String.format("%.2f", this.cantidad.doubleValue() * this.producto.getPrecio()).replace(",", ".");
+		return Double.parseDouble(res);
 	}
 }

@@ -41,7 +41,7 @@ public class Cliente implements Serializable {
 	@NotBlank
 	private String email;
 
-	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Factura> facturas;
 
 	@Temporal(TemporalType.DATE)

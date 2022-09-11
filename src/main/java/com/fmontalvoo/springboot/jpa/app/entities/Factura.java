@@ -36,7 +36,7 @@ public class Factura implements Serializable {
 	private Cliente cliente;
 
 	@JoinColumn(name = "factura_id")
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ItemFactura> items;
 
 	private static final long serialVersionUID = 1L;
@@ -100,7 +100,8 @@ public class Factura implements Serializable {
 		for (ItemFactura itemFactura : items) {
 			total += itemFactura.calcularSubTotal();
 		}
-		return total;
+		String res = String.format("%.2f", total).replace(",", ".");
+		return Double.parseDouble(res);
 	}
 
 }

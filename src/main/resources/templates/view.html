@@ -38,6 +38,33 @@
 						</ul>
 					</div>
 				</div>
+				<div
+					th:if="${#lists.isEmpty(cliente.facturas)}"
+					class="alert alert-info mt-3"
+				>Este cliente no tiene facturas registradas</div>
+				<table
+					th:unless="${#lists.isEmpty(cliente.facturas)}"
+					class="table table-bordered table-striped mt-3"
+				>
+					<thead class="thead-inverse">
+						<tr>
+							<th>ID</th>
+							<th>Fecha</th>
+							<th>Descripcion</th>
+							<th>Total</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="factura : ${cliente.facturas}">
+							<td th:text="${factura.id}"></td>
+							<td th:text="${factura.createdAt}"></td>
+							<td th:text="${factura.descripcion}"></td>
+							<td th:text="${factura.calcularTotal()}"></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
