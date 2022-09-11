@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head th:replace="layout/layout :: head">
 </head>
 <body>
@@ -10,23 +13,24 @@
 			th:text="${titulo}"
 		></h2>
 		<a
+			sec:authorize="hasRole('ROLE_ADMIN')"
 			class="btn btn-success"
 			th:href="@{/form}"
 		>Agregar</a>
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>ID</th>
+					<th sec:authorize="hasRole('ROLE_USER')">ID</th>
 					<th>Nombre</th>
 					<th>Apellido</th>
 					<th>Email</th>
 					<th>Fecha creacion</th>
-					<th>Acciones</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Acciones</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="cliente : ${clientes}">
-					<td><a
+					<td sec:authorize="hasRole('ROLE_USER')"><a
 						th:href="@{/view/}+${cliente.id}"
 						th:text="${cliente.id}"
 					></a></td>
@@ -34,7 +38,7 @@
 					<td th:text="${cliente.apellido}"></td>
 					<td th:text="${cliente.email}"></td>
 					<td th:text="${cliente.createdAt}"></td>
-					<td><a
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a
 						class="btn btn-primary btn-xs"
 						th:href="@{/form/}+${cliente.id}"
 					>Editar</a> <a

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head th:replace="layout/layout :: head"></head>
 <body>
 	<header th:replace="layout/layout :: header"></header>
@@ -42,7 +45,7 @@
 					th:if="${#lists.isEmpty(cliente.facturas)}"
 					class="alert alert-info mt-3"
 				>Este cliente no tiene facturas registradas</div>
-				<a
+				<a sec:authorize="hasRole('ROLE_ADMIN')"
 					class="btn btn-success mt-3"
 					th:href="@{'/factura/form/' + ${cliente.id}}"
 				>Crear factura</a>
@@ -56,19 +59,19 @@
 							<th>Fecha</th>
 							<th>Descripcion</th>
 							<th>Total</th>
-							<th>Acciones</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Acciones</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="factura : ${cliente.facturas}">
-							<td><a
+							<td sec:authorize="hasRole('ROLE_USER')"><a
 								th:href="@{'/factura/view/' + ${factura.id}}"
 								th:text="${factura.id}"
 							></a></td>
 							<td th:text="${factura.createdAt}"></td>
 							<td th:text="${factura.descripcion}"></td>
 							<td th:text="${factura.total}"></td>
-							<td><a
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a
 								class="btn btn-danger btn-xs"
 								th:href="@{/factura/delete/} + ${factura.id}"
 							>Eliminar</a></td>
