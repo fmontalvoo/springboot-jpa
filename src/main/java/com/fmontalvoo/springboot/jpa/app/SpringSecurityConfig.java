@@ -1,5 +1,7 @@
 package com.fmontalvoo.springboot.jpa.app;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private DataSource dataSource;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/list").permitAll()
@@ -26,18 +34,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
-		PasswordEncoder encoder = this.passwordEncoder();
-		UserBuilder userBuilder = User.builder().passwordEncoder(encoder::encode);
+		builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
+				.usersByUsernameQuery("select username, password, enabled from users where username like ?")
+				.authoritiesByUsernameQuery(
+						"select u.username, a.authority from authorities a inner join users u on(a.user_id=u.id) where u.username like ?");
+//		PasswordEncoder encoder = passwordEncoder;
+//		UserBuilder userBuilder = User.builder().passwordEncoder(encoder::encode);
 //		UserBuilder userBuilder = User.builder().passwordEncoder(password -> encoder.encode(password));
-
-		builder.inMemoryAuthentication()
-				.withUser(userBuilder.username("admin").password("Admin.123").roles("ADMIN", "USER"))
-				.withUser(userBuilder.username("frank").password("Admin.123").roles("USER"));
-	}
-
-	@Bean
-	public static BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+//
+//		builder.inMemoryAuthentication()
+//				.withUser(userBuilder.username("admin").password("Admin.123").roles("ADMIN", "USER"))
+//				.withUser(userBuilder.username("frank").password("Admin.123").roles("USER"));
 	}
 
 }
