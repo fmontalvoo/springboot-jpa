@@ -14,11 +14,10 @@
 					<a
 						class="btn btn-danger btn-xs mx-1"
 						th:href="@{'/factura/view/' + ${factura.id}(format=pdf)}"
-					>PDF</a>
-					<!--  <a
+					>PDF</a> <a
 						class="btn btn-success btn-xs mx-1"
-						th:href="@{'/factura/view/' + ${factura.id}(format=pdf)}"
-					>Excel</a>-->
+						th:href="@{'/factura/view/' + ${factura.id}(format=xlsx)}"
+					>Excel</a>
 				</div>
 				<h4 class="card-title">
 					<a
