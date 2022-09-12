@@ -3,6 +3,7 @@ package com.fmontalvoo.springboot.jpa.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +48,9 @@ public class ClienteController {
 
 	@Autowired
 	private IUploadFileService ufs;
+
+	@Autowired
+	private MessageSource messageSource;
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -113,7 +118,7 @@ public class ClienteController {
 
 	@GetMapping(value = { "/", "/list" })
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication auth,
-			HttpServletRequest request) {
+			HttpServletRequest request, Locale locale) {
 
 		if (auth != null) {
 			if (hasRole("ROLE_ADMIN"))
@@ -137,7 +142,7 @@ public class ClienteController {
 		Page<Cliente> clientes = cs.findAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/list", clientes);
 
-		model.addAttribute("titulo", "Listado de clientes");
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.lista.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 

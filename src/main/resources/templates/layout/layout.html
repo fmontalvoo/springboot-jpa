@@ -46,6 +46,16 @@
 						>Clientes</a></li>
 					</ul>
 					<div class="d-inline d-flex">
+						<ul class="navbar-nav d-inline d-flex mx-3">
+							<li><a
+								class="btn btn-outline-primary mx-1"
+								th:href="@{/locale(lang=es_EC)}"
+							>ES</a></li>
+							<li><a
+								class="btn btn-outline-success mx-1"
+								th:href="@{/locale(lang=en_EN)}"
+							>EN</a></li>
+						</ul>
 						<!-- <button class="btn btn-outline-danger" (click)="logout()">
                         Cerrar sesi&oacute;n
                     </button> -->
@@ -54,7 +64,7 @@
 							class="nav-item dropdown"
 						>
 							<button
-								class="btn btn-secondary dropdown-toggle"
+								class="btn btn-secondary dropdown-toggle mx-2"
 								type="button"
 								id="dropdownMenuButton1"
 								data-bs-toggle="dropdown"
@@ -76,7 +86,7 @@
 										th:value="${_csrf.token}"
 									/>
 									<button
-										class="btn btn-xs"
+										class="btn btn-xs dropdown-item"
 										type="submit"
 									>Cerrar sesi&oacute;n</button>
 								</form>
@@ -84,7 +94,7 @@
 						</div>
 						<a
 							sec:authorize="!isAuthenticated()"
-							class="btn btn-primary"
+							class="btn btn-primary mx-2"
 							th:href="@{/login}"
 						>Iniciar sesi&oacute;n</a>
 					</div>
