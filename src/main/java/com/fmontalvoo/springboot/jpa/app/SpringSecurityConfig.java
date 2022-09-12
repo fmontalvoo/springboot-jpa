@@ -14,15 +14,20 @@ import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fmontalvoo.springboot.jpa.app.services.JpaUserDetailsService;
+
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private DataSource dataSource;
+//	@Autowired
+//	private DataSource dataSource;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+
+	@Autowired
+	private JpaUserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -34,11 +39,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
-		builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
-				.usersByUsernameQuery("select username, password, enabled from users where username like ?")
-				.authoritiesByUsernameQuery(
-						"select u.username, a.authority from authorities a inner join users u on(a.user_id=u.id) where u.username like ?");
-//		PasswordEncoder encoder = passwordEncoder;
+		builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+
+//		builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
+//				.usersByUsernameQuery("select username, password, enabled from users where username like ?")
+//				.authoritiesByUsernameQuery(
+//						"select u.username, a.authority from authorities a inner join users u on(a.user_id=u.id) where u.username like ?");
+
+		// PasswordEncoder encoder = passwordEncoder;
 //		UserBuilder userBuilder = User.builder().passwordEncoder(encoder::encode);
 //		UserBuilder userBuilder = User.builder().passwordEncoder(password -> encoder.encode(password));
 //

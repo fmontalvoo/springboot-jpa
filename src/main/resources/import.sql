@@ -20,3 +20,10 @@ INSERT INTO facturas(cliente_id, descripcion, created_at) VALUES(1, 'Esto es una
 INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(2, 1, 5);
 INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(4, 1, 3);
 INSERT INTO factura_items(cantidad, factura_id, producto_id) VALUES(6, 1, 1);
+
+INSERT INTO `users` (`id`, `username`, `password`, `enabled`) VALUES (1, 'frank', '$2a$10$kki9MQyfLqgcSTXyqc0W4ODW0vQsVgmDeeNzFV.99F2v.Est90mm.', 1);
+INSERT INTO `users` (`id`, `username`, `password`, `enabled`) VALUES (2, 'admin', '$2a$10$t2p7nzbYU1hVKHyeZBE.Yef2oBWT832LQrS1MBOxsre337rG5lR4C', 1);
+
+INSERT INTO `authorities` (`id`, `user_id`, `authority`) VALUES (1, 1, 'ROLE_USER');
+INSERT INTO `authorities` (`id`, `user_id`, `authority`) VALUES (3, 2, 'ROLE_ADMIN');
+INSERT INTO `authorities` (`id`, `user_id`, `authority`) VALUES (2, 2, 'ROLE_USER');
