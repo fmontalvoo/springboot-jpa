@@ -10,6 +10,16 @@
 				th:text="${titulo}"
 			></div>
 			<div class="card-body">
+				<div class="float-end">
+					<a
+						class="btn btn-danger btn-xs mx-1"
+						th:href="@{'/factura/view/' + ${factura.id}(format=pdf)}"
+					>PDF</a>
+					<!--  <a
+						class="btn btn-success btn-xs mx-1"
+						th:href="@{'/factura/view/' + ${factura.id}(format=pdf)}"
+					>Excel</a>-->
+				</div>
 				<h4 class="card-title">
 					<a
 						th:href="@{'/view/' + ${factura.cliente.id}}"
@@ -62,7 +72,7 @@
 							<th>Producto</th>
 							<th>Precio</th>
 							<th>Cantidad</th>
-							<th>SubTotal</th>
+							<th>Subtotal</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -74,7 +84,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<h5 class="float-right">
+				<h5 class="float-end">
 					<b>Total</b>: <span th:text="${factura.total}"></span>
 				</h5>
 				<a
