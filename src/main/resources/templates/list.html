@@ -17,6 +17,12 @@
 			class="btn btn-success"
 			th:href="@{/form}"
 		>Agregar</a>
+		<div class="float-end">
+			<a
+				class="btn btn-success btn-xs mx-1"
+				th:href="@{'/list'(format=csv)}"
+			>CSV</a>
+		</div>
 		<table class="table table-striped">
 			<thead>
 				<tr>
