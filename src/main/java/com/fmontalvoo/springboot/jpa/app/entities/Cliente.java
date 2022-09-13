@@ -21,7 +21,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "clientes")
@@ -43,12 +44,13 @@ public class Cliente implements Serializable {
 	@NotBlank
 	private String email;
 
-	@JsonIgnore
+	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Factura> facturas;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "created_at")
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date createdAt;
 
 	private static final long serialVersionUID = 1L;

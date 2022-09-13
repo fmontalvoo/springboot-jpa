@@ -22,6 +22,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "facturas")
 public class Factura implements Serializable {
@@ -29,15 +33,20 @@ public class Factura implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@NotBlank
 	private String descripcion;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "created_at")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date createdAt;
 
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
 
+	@JsonManagedReference
 	@JoinColumn(name = "factura_id")
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ItemFactura> items;

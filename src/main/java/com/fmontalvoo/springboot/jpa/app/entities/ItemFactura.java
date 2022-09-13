@@ -12,6 +12,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "factura_items")
 public class ItemFactura implements Serializable {
@@ -21,11 +24,13 @@ public class ItemFactura implements Serializable {
 	private Long id;
 	private Integer cantidad;
 
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Factura factura;
 
 //	@JoinColumn(name = "producto_id")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 	private Producto producto;
 
 	private static final long serialVersionUID = 1L;
