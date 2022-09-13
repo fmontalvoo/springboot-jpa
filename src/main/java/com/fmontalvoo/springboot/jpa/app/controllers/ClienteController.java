@@ -3,6 +3,7 @@ package com.fmontalvoo.springboot.jpa.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -39,6 +41,7 @@ import com.fmontalvoo.springboot.jpa.app.entities.Cliente;
 import com.fmontalvoo.springboot.jpa.app.services.IClienteService;
 import com.fmontalvoo.springboot.jpa.app.services.IUploadFileService;
 import com.fmontalvoo.springboot.jpa.app.util.PageRender;
+import com.fmontalvoo.springboot.jpa.app.view.xml.ClienteList;
 
 @Controller
 public class ClienteController {
@@ -114,6 +117,11 @@ public class ClienteController {
 		model.addAttribute("titulo", cliente.getNombre().concat(" ").concat(cliente.getApellido()));
 
 		return "view";
+	}
+
+	@GetMapping("/list-rest")
+	public @ResponseBody ClienteList listarRest() {
+		return new ClienteList(cs.findAll());
 	}
 
 	@GetMapping(value = { "/", "/list" })
