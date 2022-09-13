@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "factura_items")
@@ -53,6 +54,7 @@ public class ItemFactura implements Serializable {
 		this.cantidad = cantidad;
 	}
 
+	@XmlTransient
 	public Factura getFactura() {
 		return factura;
 	}

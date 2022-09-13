@@ -21,7 +21,10 @@
 			<a
 				class="btn btn-success btn-xs mx-1"
 				th:href="@{'/list'(format=csv)}"
-			>CSV</a>
+			>CSV</a> <a
+				class="btn btn-secondary btn-xs mx-1"
+				th:href="@{'/list'(format=xml)}"
+			>XML</a>
 		</div>
 		<table class="table table-striped">
 			<thead>

@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import com.fmontalvoo.springboot.jpa.app.view.xml.ClienteList;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
@@ -40,6 +43,13 @@ public class MvcConfig implements WebMvcConfigurer {
 		LocaleChangeInterceptor localInterceptor = new LocaleChangeInterceptor();
 		localInterceptor.setParamName("lang");
 		return localInterceptor;
+	}
+
+	@Bean
+	public Jaxb2Marshaller jaxb2Marshaller() {
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setClassesToBeBound(new Class[] { ClienteList.class });
+		return marshaller;
 	}
 
 	/**
